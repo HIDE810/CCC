@@ -107,6 +107,11 @@ E:
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 	@python $(TOPDIR)/py_scripts/format.py $(TOPDIR)/$(BUILD)/dump.txt E
 
+F0F:
+	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+	@python $(TOPDIR)/py_scripts/format.py $(TOPDIR)/$(BUILD)/dump.txt F0F
+
 0: $(BUILD)
 
 $(BUILD):
@@ -134,7 +139,6 @@ DEPENDS	:=	$(OFILES:.o=.d)
 $(OUTPUT).elfe	:	$(OFILES)
 
 %.elfe: $(OFILES)
-	@echo wewe $(notdir $@)
 	@$(LD) $(LDFLAGS) $(OFILES) $(LIBPATHS) $(LIBS) -o $@
 	@$(NM) -CSn $@ > $(notdir $*.lst)
 	@mv $(OUTPUT).elfe $(OUTPUT).elf

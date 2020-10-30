@@ -32,8 +32,6 @@ def runFormat0(f, of):
 
             combo = part1 + " " + part2 + "\n"
             of.write(combo)
-            print(part2)
-            #print(line[0])
 
 def runFormatE(f, of):
     lines = f.read().splitlines()
@@ -58,12 +56,43 @@ def runFormatE(f, of):
                     combo = ('%08X %08X' % ((0xE0000000 | part1), (val - part1 + 4))) + "\n" + combo
             
             of.write(combo)
-            print(part2)
             i = i + 1
-            #print(line[0])
+
+def runFormatF0F(f, of):
+    lines = f.read().splitlines()
+    val = int(lines[-1].split(":")[0], 16)
+
+    i = 0
+    for line in lines:
+        if line.startswith("  "):
+            line = line.split(" ")
+            line = line[2].split(":")
+
+            part2 = line[1].strip("\t").upper()
+            combo = part2 + (" " if (i & 1 == 0) else "\n")
+            if i == 0:
+                part1 = int(line[0], 16)
+                combo = ('%08X %08X' % ((0xF0F00000), (val - part1 + 4))) + "\n" + combo
+
+            of.write(combo)
+            i = i + 1
     
-name = "[sample]"
+    if (i & 1 != 0):
+        of.write("00000000\n")
+
+name = "[code]"
 f, of = start()
 codeName(of, name)
-runFormatE(f, of) if mode == "E" else runFormat0(f, of)
+
+if mode == "E":
+    runFormatE(f, of)
+elif mode == "F0F":
+    runFormatF0F(f, of)
+else:
+    runFormat0(f, of)
+
 end(f, of)
+
+with open('out.txt') as f:
+    print(f.read())
+    print(">> Dumped to out.txt")

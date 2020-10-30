@@ -51,12 +51,14 @@ void checkMemory(Handle handle) {
 	
 }
 
+/*
 void launchApplet( Handle handle ) {
 	static errorConf *err;
 	
 	errorInit(err, ERROR_EULA, CFG_LANGUAGE_EN);
 	errorDisp(err);
 }
+*/
 
 void mcuHwcTest() {
 	srvPmInit();
